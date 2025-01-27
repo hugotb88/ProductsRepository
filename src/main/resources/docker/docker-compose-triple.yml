@@ -1,0 +1,55 @@
+version: "3.8"
+
+services:
+  kafka-1: #Custom name for the first Kafka broker
+    image: bitnami/kafka:latest #Image that we are going to use, is the official one
+    ports:
+      - "9092:9092" #Left side -> port in local machine, Right side: Port inside of the container where Kafa is executed.
+    environment: #Parameters to be loaded when the app starts
+      - KAFKA_CFG_NODE_ID=1  #ID of the Node or cluster, each Kafka broker should have an ID.
+      - KAFKA_KRAFT_CLUSTER_ID=vicKafkaCluster001 #ID of the cluster, if we want to have all the brokers on the same cluster, this value  should be the same.  kafka-storage.sh random-uuid
+      - KAFKA_CFG_PROCESS_ROLES=controller,broker #Roles that this broker will play
+      - KAFKA_CFG_CONTROLLER_QUORUM_VOTERS=1@kafka-1:9091,2@kafka-2:9091,3@kafka-3:9091 #Number of brokers that participate in the cluster maintenance state, they vote to keep the stability of the cluster. port should not be the same than ports.
+      - KAFKA_CFG_LISTENERS=PLAINTEXT://:9090,CONTROLLER://:9091,EXTERNAL://:9092 #Defines network interfaces,port and protocols that will be used by customer to comunicate. CUSTOM NAMES
+      - KAFKA_CFG_ADVERTISED_LISTENERS=PLAINTEXT://kafka-1:9090,CONTROLLER://kafka-1:9091,EXTERNAL://${HOSTNAME:-localhost}:9092 #Directions that clients need to use to connect to Kafka broker.
+      - KAFKA_CFG_LISTENER_SECURITY_PROTOCOL_MAP=CONTROLLER:PLAINTEXT,EXTERNAL:PLAINTEXT,PLAINTEXT:PLAINTEXT #Security, assigns every listener a security protocol.
+      - KAFKA_CFG_CONTROLLER_LISTENER_NAMES=CONTROLLER #Custom controller name
+      - KAFKA_CFG_INTER_BROKER_LISTENER_NAME=PLAINTEXT #Custom intercommunication broker name
+    volumes: #Configurations to store data in the host machine. Bu default, Kafka stores the information inside the docker container and data is lost onoce you restart will be lost.
+      - C:\Users\Hugo\proyectos\Kafka\docker-compose\volumes\server-1:/bitnami/kafka #local machine directory : kfka folder inside the container (depends of the image and contianer)
+
+
+  kafka-2: #Custom name for the second Kafka broker
+    image: bitnami/kafka:latest #Image that we are going to use, is the official one
+    ports:
+      - "9094:9094" #Left side -> port in local machine, Right side: Port inside of the container where Kafa is executed.
+    environment: #Parameters to be loaded when the app starts
+      - KAFKA_CFG_NODE_ID=2  #ID of the Node or cluster, each Kafka broker should have an ID.
+      - KAFKA_KRAFT_CLUSTER_ID=vicKafkaCluster001 #ID of the cluster, if we want to have all the brokers on the same cluster, this value  should be the same.  kafka-storage.sh random-uuid
+      - KAFKA_CFG_PROCESS_ROLES=controller,broker #Roles that this broker will play
+      - KAFKA_CFG_CONTROLLER_QUORUM_VOTERS=1@kafka-1:9091,2@kafka-2:9091,3@kafka-3:9091 #Number of brokers that participate in the cluster maintenance state, they vote to keep the stability of the cluster. port should not be the same than ports.
+      - KAFKA_CFG_LISTENERS=PLAINTEXT://:9090,CONTROLLER://:9091,EXTERNAL://:9094 #Defines network interfaces,port and protocols that will be used by customer to comunicate. CUSTOM NAMES
+      - KAFKA_CFG_ADVERTISED_LISTENERS=PLAINTEXT://kafka-1:9090,CONTROLLER://kafka-1:9091,EXTERNAL://${HOSTNAME:-localhost}:9094 #Directions that clients need to use to connect to Kafka broker.
+      - KAFKA_CFG_LISTENER_SECURITY_PROTOCOL_MAP=CONTROLLER:PLAINTEXT,EXTERNAL:PLAINTEXT,PLAINTEXT:PLAINTEXT #Security, assigns every listener a security protocol.
+      - KAFKA_CFG_CONTROLLER_LISTENER_NAMES=CONTROLLER #Custom controller name
+      - KAFKA_CFG_INTER_BROKER_LISTENER_NAME=PLAINTEXT #Custom intercommunication broker name
+    volumes: #Configurations to store data in the host machine. Bu default, Kafka stores the information inside the docker container and data is lost onoce you restart will be lost.
+      - C:\Users\Hugo\proyectos\Kafka\docker-compose\volumes\server-2:/bitnami/kafka #local machine directory : kfka folder inside the container (depends of the image and contianer)
+
+
+  kafka-3: #Custom name for the third Kafka broker
+    image: bitnami/kafka:latest #Image that we are going to use, is the official one
+    ports:
+      - "9096:9096" #Left side -> port in local machine, Right side: Port inside of the container where Kafa is executed.
+    environment: #Parameters to be loaded when the app starts
+      - KAFKA_CFG_NODE_ID=3  #ID of the Node or cluster, each Kafka broker should have an ID.
+      - KAFKA_KRAFT_CLUSTER_ID=vicKafkaCluster001 #ID of the cluster, if we want to have all the brokers on the same cluster, this value  should be the same.  kafka-storage.sh random-uuid
+      - KAFKA_CFG_PROCESS_ROLES=controller,broker #Roles that this broker will play
+      - KAFKA_CFG_CONTROLLER_QUORUM_VOTERS=1@kafka-1:9091,2@kafka-2:9091,3@kafka-3:9091 #Number of brokers that participate in the cluster maintenance state, they vote to keep the stability of the cluster. port should not be the same than ports.
+      - KAFKA_CFG_LISTENERS=PLAINTEXT://:9090,CONTROLLER://:9091,EXTERNAL://:9096 #Defines network interfaces,port and protocols that will be used by customer to comunicate. CUSTOM NAMES
+      - KAFKA_CFG_ADVERTISED_LISTENERS=PLAINTEXT://kafka-1:9090,CONTROLLER://kafka-1:9091,EXTERNAL://${HOSTNAME:-localhost}:9096 #Directions that clients need to use to connect to Kafka broker. #Directions that clients need to use to connect to Kafka broker.
+      - KAFKA_CFG_LISTENER_SECURITY_PROTOCOL_MAP=CONTROLLER:PLAINTEXT,EXTERNAL:PLAINTEXT,PLAINTEXT:PLAINTEXT #Security, assigns every listener a security protocol.
+      - KAFKA_CFG_CONTROLLER_LISTENER_NAMES=CONTROLLER #Custom controller name
+      - KAFKA_CFG_INTER_BROKER_LISTENER_NAME=PLAINTEXT #Custom intercommunication broker name
+    volumes: #Configurations to store data in the host machine. Bu default, Kafka stores the information inside the docker container and data is lost onoce you restart will be lost.
+      - C:\Users\Hugo\proyectos\Kafka\docker-compose\volumes\server-3:/bitnami/kafka #local machine directory : kfka folder inside the container (depends of the image and contianer)

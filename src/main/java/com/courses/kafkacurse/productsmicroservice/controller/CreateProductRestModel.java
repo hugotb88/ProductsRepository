@@ -1,4 +1,4 @@
-package com.courses.kafkacurse.productsmicroservice.rest;
+package com.courses.kafkacurse.productsmicroservice.controller;
 
 import java.math.BigDecimal;
 

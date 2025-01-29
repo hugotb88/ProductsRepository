@@ -11,7 +11,7 @@ services:
       - KAFKA_CFG_PROCESS_ROLES=controller,broker #Roles that this broker will play
       - KAFKA_CFG_CONTROLLER_QUORUM_VOTERS=1@kafka-1:9091,2@kafka-2:9091,3@kafka-3:9091 #Number of brokers that participate in the cluster maintenance state, they vote to keep the stability of the cluster. port should not be the same than ports.
       - KAFKA_CFG_LISTENERS=PLAINTEXT://:9090,CONTROLLER://:9091,EXTERNAL://:9092 #Defines network interfaces,port and protocols that will be used by customer to comunicate. CUSTOM NAMES
-      - KAFKA_CFG_ADVERTISED_LISTENERS=PLAINTEXT://kafka-1:9090,CONTROLLER://kafka-1:9091,EXTERNAL://${HOSTNAME:-localhost}:9092 #Directions that clients need to use to connect to Kafka broker.
+      - KAFKA_CFG_ADVERTISED_LISTENERS=PLAINTEXT://kafka-1:9090,CONTROLLER://kafka-1:9091,EXTERNAL://host.docker.internal:9092 #Directions that clients need to use to connect to Kafka broker.
       - KAFKA_CFG_LISTENER_SECURITY_PROTOCOL_MAP=CONTROLLER:PLAINTEXT,EXTERNAL:PLAINTEXT,PLAINTEXT:PLAINTEXT #Security, assigns every listener a security protocol.
       - KAFKA_CFG_CONTROLLER_LISTENER_NAMES=CONTROLLER #Custom controller name
       - KAFKA_CFG_INTER_BROKER_LISTENER_NAME=PLAINTEXT #Custom intercommunication broker name
@@ -29,7 +29,7 @@ services:
       - KAFKA_CFG_PROCESS_ROLES=controller,broker #Roles that this broker will play
       - KAFKA_CFG_CONTROLLER_QUORUM_VOTERS=1@kafka-1:9091,2@kafka-2:9091,3@kafka-3:9091 #Number of brokers that participate in the cluster maintenance state, they vote to keep the stability of the cluster. port should not be the same than ports.
       - KAFKA_CFG_LISTENERS=PLAINTEXT://:9090,CONTROLLER://:9091,EXTERNAL://:9094 #Defines network interfaces,port and protocols that will be used by customer to comunicate. CUSTOM NAMES
-      - KAFKA_CFG_ADVERTISED_LISTENERS=PLAINTEXT://kafka-1:9090,CONTROLLER://kafka-1:9091,EXTERNAL://${HOSTNAME:-localhost}:9094 #Directions that clients need to use to connect to Kafka broker.
+      - KAFKA_CFG_ADVERTISED_LISTENERS=PLAINTEXT://kafka-1:9090,CONTROLLER://kafka-1:9091,EXTERNAL://host.docker.internal:9094 #Directions that clients need to use to connect to Kafka broker.
       - KAFKA_CFG_LISTENER_SECURITY_PROTOCOL_MAP=CONTROLLER:PLAINTEXT,EXTERNAL:PLAINTEXT,PLAINTEXT:PLAINTEXT #Security, assigns every listener a security protocol.
       - KAFKA_CFG_CONTROLLER_LISTENER_NAMES=CONTROLLER #Custom controller name
       - KAFKA_CFG_INTER_BROKER_LISTENER_NAME=PLAINTEXT #Custom intercommunication broker name
@@ -47,7 +47,7 @@ services:
       - KAFKA_CFG_PROCESS_ROLES=controller,broker #Roles that this broker will play
       - KAFKA_CFG_CONTROLLER_QUORUM_VOTERS=1@kafka-1:9091,2@kafka-2:9091,3@kafka-3:9091 #Number of brokers that participate in the cluster maintenance state, they vote to keep the stability of the cluster. port should not be the same than ports.
       - KAFKA_CFG_LISTENERS=PLAINTEXT://:9090,CONTROLLER://:9091,EXTERNAL://:9096 #Defines network interfaces,port and protocols that will be used by customer to comunicate. CUSTOM NAMES
-      - KAFKA_CFG_ADVERTISED_LISTENERS=PLAINTEXT://kafka-1:9090,CONTROLLER://kafka-1:9091,EXTERNAL://${HOSTNAME:-localhost}:9096 #Directions that clients need to use to connect to Kafka broker. #Directions that clients need to use to connect to Kafka broker.
+      - KAFKA_CFG_ADVERTISED_LISTENERS=PLAINTEXT://kafka-1:9090,CONTROLLER://kafka-1:9091,EXTERNAL://host.docker.internal:9096 #Directions that clients need to use to connect to Kafka broker. #Directions that clients need to use to connect to Kafka broker.
       - KAFKA_CFG_LISTENER_SECURITY_PROTOCOL_MAP=CONTROLLER:PLAINTEXT,EXTERNAL:PLAINTEXT,PLAINTEXT:PLAINTEXT #Security, assigns every listener a security protocol.
       - KAFKA_CFG_CONTROLLER_LISTENER_NAMES=CONTROLLER #Custom controller name
       - KAFKA_CFG_INTER_BROKER_LISTENER_NAME=PLAINTEXT #Custom intercommunication broker name

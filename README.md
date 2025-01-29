@@ -38,7 +38,11 @@ You can review two things:
 192.168.1.147 gateway.docker.internal
 # To allow the same kube context to work on the host and the container:
 127.0.0.1 kubernetes.docker.internal
-# End of section```
+# End of section 
+```
+
+## To Review a topic as Consumer
+```./kafka-console-consumer.sh --topic product-created-events-topic --bootstrap-server host.docker.internal:9092 --property print.key=true```
 
 
 

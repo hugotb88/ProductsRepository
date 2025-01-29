@@ -15,7 +15,9 @@ public class KafkaConfig {
         return TopicBuilder.name("product-created-events-topic")
                 .partitions(3)
                 .replicas(3)
-                .configs(Map.of("min.insync.replicas","2")) //Minimum number of replicas that should acknowledge about the operation to consider it successfull.
+                .configs(Map.of(
+                        "min.insync.replicas","2"
+                )) //Minimum number of replicas that should acknowledge about the operation to consider it successfull.
                 .build();
     }
 }

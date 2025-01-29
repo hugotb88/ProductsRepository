@@ -35,9 +35,10 @@ public class ProductServiceImpl implements ProductService {
                 LOGGER.error("Failed to send message: " + ex.getMessage());
             }else{
                 LOGGER.info("Message sent successfully: " + result.getRecordMetadata());
-
             }
         });
+
+        LOGGER.info("*** Returning Product ID ***");
         return productId;
     }
 }

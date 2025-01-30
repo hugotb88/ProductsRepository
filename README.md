@@ -44,5 +44,57 @@ You can review two things:
 ## To Review a topic as Consumer
 ```./kafka-console-consumer.sh --topic product-created-events-topic --bootstrap-server host.docker.internal:9092 --property print.key=true```
 
+# Notes about Kafka Producer
+- If you configure your Producer to get an acknowledgement about that the message was received and stored \
+by all the followers (Replicas),performance will decrease but reliability increase. 
+
+
+```spring.kafka.producer.acks=all``` to configure to get acknowledgment from all the followers (in sync Replicas).
+
+```spring.kafka.producer.acks=1``` to configure to get acknowledgment from the leader only. Useful when the message is not a lot critical.
+
+```spring.kafka.producer.acks=0``` to configure to NOT get acknowledgment . Useful when the amount of messages is high but they are not critical.
+not guarantees that the message is stored, but is faster (e.g. GPS locaiton in real time).
+
+----
+
+
+* When a Kafka Producer sends a message to a broker we have the following options
+  * No Response -> acks=0
+  * Acknowledgment of successful storage
+  * Non-Retryable Error -> A Permanent problem that can't be resolved by retries (e.g. big message).
+  * Retryable Error -> A Temporary problem that can be resolved by retries.
+
+```spring.kafka.producer.retries=10``` Configures the number of retries by the Producer to send a message. \
+Default value of retries in Kafka is 2147483647 times. 
+
+```spring.kafka.producer.properties.rety.backoff.ms=1000``` Configures the amount of time that kafka will wait until the next retry.\
+Default is 100ms
+
+```spring.kafka.producer.properties.delivery.timeout.ms=120000``` Maximum time that Producer can spend trying to deliver the message. \
+Default value is 120000 (2 mins), if we change it we need to follow these rules:
+* delivery.timeout.ms > linger.ms + request.timeout.ms
+  * ```spring.kafka.producer.properties.linger.ms=0``` -> Maximum time that Producer will wait and buffer data before sending a batch of messages.
+  * ```spring.kafka.producer.request.timeout.ms=30000``` -> Maximum time that Producer will wait for a response from the broker.
+
+``` 
+./kafka-topics.sh --create --topic insync-topic --partitions 3 --replication-factor 3 --bootstrap-server host.docker.internal:9092 --config min.insync.replicas=2
+```
+To create a Topic with in-sync replicas = 2, that means, two brokers replicating what the leader receives and stores.
+
+To modify an existing topic:
+
+```
+./kafka-configs.sh --bootstrap-server host.docker.internal:9092 --alter --entity-type topics --entity-name product-cr
+eated-events-topic --add-config min.insync.replicas=2
+```
+To modify the number of in-sync replicas in a topic.
+
+
+
+
+----
+
+
 
 

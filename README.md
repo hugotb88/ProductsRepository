@@ -90,10 +90,50 @@ eated-events-topic --add-config min.insync.replicas=2
 ```
 To modify the number of in-sync replicas in a topic.
 
-
-
-
 ----
+
+# Make an IDEMPOTENT PRODUCER
+
+_Usually this is a default configuration._
+
+Lets think in the following scenario: 
+* A Producer sends a message "A".
+* Broker receives the message and stores it in a Kafka topic.
+* Broker sends and acknowledgment but a network error happens and it doesnt come to the producer.
+* The Producer notices that and retries to send the message "A"
+* Broker receives the message and stores it in a Kafka topic.
+* Broker sends and acknowledgment and this time the Producer receives it.
+
+Now wee have data duplicated, sometimes is not a big deal, but that can create inconsistency for some apps, thats where an idempotent producer comes.
+
+**"An Idempotent Producer avoids duplicate messages in the presence of failures and retries"**
+
+This means that the producer can send the same message multiple times but it will be stored once, ending with this workflow:
+* A Producer sends a message "A".
+* Broker receives the message and stores it in a Kafka topic.
+* Broker sends and acknowledgment but a network error happens and it doesnt come to the producer.
+* The Producer notices that and retries to send the message "A"
+* Broker sends and acknowledgment and this time the Producer receives it.
+
+We need to configure the following in the properties file:
+`spring.kafka.producer.properties.enable.idempotence=true`
+
+If its a Bean configuration \
+```
+@Bean
+props.put(ProducerConfig.ENABLE_IDEMPOTENCE_CONFIG, true);
+```
+
+### Considerations
+We need to take in consideration the following rules when we have an idempotent producer:
+
+* `spring.kafka.producer.properties.acks=true` -> should be true
+* `spring.kafka.producer.properties.retries=2147483647` -> should be greater than 0
+* `spring.kafka.producer.properties.max.in.flight.requests.per.connection=5` -> should be equal or less than 5
+
+
+
+
 
 
 

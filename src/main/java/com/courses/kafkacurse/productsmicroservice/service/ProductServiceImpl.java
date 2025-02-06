@@ -1,5 +1,6 @@
 package com.courses.kafkacurse.productsmicroservice.service;
 
+import com.courses.kafkacurse.corekafkalibrary.ProductCreatedEvent;
 import com.courses.kafkacurse.productsmicroservice.controller.CreateProductRestModel;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

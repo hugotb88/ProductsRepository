@@ -77,6 +77,13 @@
             <artifactId>springdoc-openapi-ui</artifactId>
             <version>1.6.12</version>
         </dependency>
+
+        <!-- Custom Core Library -->
+        <dependency>
+            <groupId>com.courses.kafkacurse</groupId>
+            <artifactId>coreKafkaLibrary</artifactId>
+            <version>0.0.1-SNAPSHOT</version>
+        </dependency>
     </dependencies>
 
     <build>

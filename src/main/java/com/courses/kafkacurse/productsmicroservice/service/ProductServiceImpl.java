@@ -2,6 +2,8 @@ package com.courses.kafkacurse.productsmicroservice.service;
 
 import com.courses.kafkacurse.corekafkalibrary.ProductCreatedEvent;
 import com.courses.kafkacurse.productsmicroservice.controller.CreateProductRestModel;
+import org.apache.kafka.clients.producer.ProducerRecord;
+import org.apache.kafka.common.header.Headers;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.kafka.core.KafkaTemplate;
@@ -59,8 +61,17 @@ public class ProductServiceImpl implements ProductService {
 
         //Synchronous way 2
         ProductCreatedEvent productCreatedEvent = new ProductCreatedEvent(productId,product.getTitle(),product.getPrice(),product.getQuantity());
+
+        //Will help to include header information in the message, crucial for avoiding duplicates.
+        ProducerRecord<String, ProductCreatedEvent> record = new ProducerRecord<>(
+                "product-created-events-topic",
+                productId,
+                productCreatedEvent
+        );
+        record.headers().add("messageId", UUID.randomUUID().toString().getBytes());
+
         SendResult<String,ProductCreatedEvent> result =
-                kafkaTemplate.send("product-created-events-topic", productId, productCreatedEvent).get();
+                kafkaTemplate.send(record).get();
 
         LOGGER.info("Partition: " + result.getRecordMetadata().partition());
         LOGGER.info("Topic: " + result.getRecordMetadata().topic());

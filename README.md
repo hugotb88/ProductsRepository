@@ -1,6 +1,16 @@
 # ProductsRepository
 Spring Boot Microservice with Kafka (Producer) for learning purposes
 
+## Proyects related
+Producer\
+[Producer Repository]([https://www.example.com](https://github.com/hugotb88/ProductsRepository))
+
+Consumer\
+[Consumer Repository](https://github.com/hugotb88/EmailNotificationService)
+
+Core Library\
+[Core Library](https://github.com/hugotb88/coreKafkaLibrary)
+
 # Important Notes
 If you are running Kafka in docker and your are loading the ```HOSTNAME``` variable from a file, use this command
 

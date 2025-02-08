@@ -1,7 +1,7 @@
 # ProductsRepository
 Spring Boot Microservice with Kafka (Producer) for learning purposes
 
-## Proyects related
+## Projects related
 Producer\
 [Producer Repository]([https://www.example.com](https://github.com/hugotb88/ProductsRepository))
 

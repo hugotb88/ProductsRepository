@@ -29,16 +29,20 @@ import java.math.BigDecimal;
 import java.util.Map;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
+import java.util.concurrent.TimeUnit;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 /*
 Class used as example of Integration Tests
  */
-@DirtiesContext //Guarantees each test start with a clean context
+@DirtiesContext
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
-@ActiveProfiles("test") //Will look for application-test.properties
-@EmbeddedKafka(partitions = 3, count = 3, controlledShutdown = true)
-@SpringBootTest(properties = "spring.kafka.producer.bootstrap-servers=${spring.embedded.kafka.brokers}")
-public class ProductsServiceIntegrationtest {
+@ActiveProfiles("test") // application-test.properties
+@EmbeddedKafka(partitions=3, count=3, controlledShutdown=true)
+@SpringBootTest(properties="spring.kafka.producer.bootstrap-servers=${spring.embedded.kafka.brokers}")
+public class ProductsServiceIntegrationTest {
 
     @Autowired
     private ProductService productService;
@@ -47,7 +51,7 @@ public class ProductsServiceIntegrationtest {
     private EmbeddedKafkaBroker embeddedKafkaBroker;
 
     @Autowired
-    private Environment environment;
+    Environment environment;
 
     private KafkaMessageListenerContainer<String, ProductCreatedEvent> container;
     private BlockingQueue<ConsumerRecord<String, ProductCreatedEvent>> records;
@@ -66,31 +70,37 @@ public class ProductsServiceIntegrationtest {
     }
 
     @Test
-    void testCreateProduct_whenGivenValidProductDetails_successfulSendKafkaMessage() throws Exception{
+    void testCreateProduct_whenGivenValidProductDetails_successfullySendsKafkaMessage() throws Exception {
 
         // Arrange
-        // Used to initialize objects, configure mock or get ready any data that will be used in the test.
-        String title = "Pixel Pro 9";
+
+        String title="iPhone 11";
         BigDecimal price = new BigDecimal(600);
         Integer quantity = 1;
 
         CreateProductRestModel createProductRestModel = new CreateProductRestModel();
-        createProductRestModel.setTitle(title);
         createProductRestModel.setPrice(price);
         createProductRestModel.setQuantity(quantity);
+        createProductRestModel.setTitle(title);
 
         // Act
-        // Invoke the method to test using the data
+
         productService.createProduct(createProductRestModel);
 
+
         // Assert
-        // Make validations
+        ConsumerRecord<String, ProductCreatedEvent> message = records.poll(10000, TimeUnit.MILLISECONDS);
+        assertNotNull(message);
+        assertNotNull(message.key());
+        ProductCreatedEvent productCreatedEvent = message.value();
+        assertEquals(createProductRestModel.getQuantity(), productCreatedEvent.getQuantity());
+        assertEquals(createProductRestModel.getTitle(), productCreatedEvent.getTitle());
+        assertEquals(createProductRestModel.getPrice(), productCreatedEvent.getPrice());
     }
 
-    // Consumer configuration
-    private Map<String, Object> getConsumerProperties(){
-        return Map.of(
-                ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG, embeddedKafkaBroker.getBrokersAsString(),
+
+    private Map<String, Object> getConsumerProperties() {
+        return Map.of(ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG, embeddedKafkaBroker.getBrokersAsString(),
                 ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG, StringDeserializer.class,
                 ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG, ErrorHandlingDeserializer.class,
                 ErrorHandlingDeserializer.VALUE_DESERIALIZER_CLASS, JsonDeserializer.class,
@@ -100,10 +110,10 @@ public class ProductsServiceIntegrationtest {
         );
     }
 
-    // To stop the container after the tests
     @AfterAll
-    void tearDown(){
+    void tearDown() {
         container.stop();
     }
+
 
 }
